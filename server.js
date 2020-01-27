@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 
 const database = {
@@ -13,6 +15,7 @@ const database = {
             id: '123',
             name: 'John',
             email: 'john@gmail.com',
+            password: 'cookies',
             entries: 0,
             joined: new Date()
         },
@@ -21,6 +24,7 @@ const database = {
             id: '124',
             name: 'Sally',
             email: 'sally@gmail.com',
+            password: 'bananas', 
             entries: 0,
             joined: new Date()
         }
@@ -49,7 +53,7 @@ app.post('/signin', (req, res) => {
         console.log('second guess: ', res);
     });
     if (req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
-        res.json('success');
+        res.json(database.users[0]);
     } else {
         res.status(400).json('error logging in');
     }
@@ -62,7 +66,6 @@ app.post('/register', (req, res) => {
             id: '125',
             name: name,
             email: email,
-            password: password,
             entries: 0,
             joined: new Date()
         }
@@ -84,7 +87,7 @@ app.get('/profile/:id', (req, res) => {
     }
 });
 
-app.post('/image', (req, res) => {
+app.put('/image', (req, res) => {
     const { id } = req.body;
     let found = false;
     database.users.forEach(user => {
@@ -111,7 +114,7 @@ app.post('/image', (req, res) => {
 //     // res = false
 // });
 
-app.listen(5000, () => console.log('app is running on port 5000'));
+app.listen(3000, () => console.log('app is running on port 3000'));
 
 /*
     / -> res = this is working
