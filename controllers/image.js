@@ -1,3 +1,18 @@
+const Clarifai = require('clarifai');
+
+// initialize with your api key. This will also work in your browser via http://browserify.org/
+const app = new Clarifai.App({
+  apiKey: 'e11055fa31614afb9cf55f94ec2937d5'
+});
+
+const handleApiCall = (req, res) => {
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
+    .then(data => { 
+        res.json(data);
+    })
+    .catch(err => res.status(400).json('unable to work with API'));
+}
+
 const handleImage = (req, res, db) => {
     const { id } = req.body;
     db('users').where('id', '=', id)
@@ -10,5 +25,6 @@ const handleImage = (req, res, db) => {
 }
 
 module.exports = {
-    handleImage: handleImage
+    handleImage: handleImage,
+    handleApiCall: handleApiCall
 }
